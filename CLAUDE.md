@@ -10,7 +10,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | `npm run build` | Production lib build to `dist/widget-gauge.js` |
 | `npm run watch` | Build in watch mode only |
 | `npm run types` | Regenerate `src/definition-schema.d.ts` from `src/definition-schema.json` (run after any schema edit) |
-| `npm run release` | `npm version patch`: preflight guards (on `main`, clean tree, not behind `origin/main`, generated files current, build passes) → bump + `dist/` rebuild (`version` hook, so the local build registers the new tag) → commit + bare-semver tag → `git push --follow-tags` → waits on the CI publish. Also `release:minor` / `release:major`. |
+| `just lint` | What the CI gate checks besides the build: regenerating the committed generated files changes nothing |
+| `just merge` / `just release-patch` | Pull requests into `main` from a feature branch with everything committed; the merge of a release pull request publishes to npm in CI (`build-publish.yml`), then the release GitHub App tags the bare version. Also `release-minor` / `release-major`. |
 | `npm run link` / `unlink` | Symlink the built package into `../RESWARM/frontend` for integration testing |
 
 No test runner or linter is configured. Node `>=24.9.0`, npm `>=10.0.2`.
@@ -49,7 +50,7 @@ Workflow: edit `definition-schema.json` -> `npm run types` -> import the regener
 
 ## Release & Platform Rollout
 
-`npm run release` bumps the patch version, pushes the tag, and a GitHub Action publishes to npm. A published version reaches boards only after the platform's rollout (Studio's dependency pin, the platform database's widget registration); IronFlock developers find those steps in the internal runbook `docs/INTERNAL-widget-platform.md` of the deployments repository.
+`just release-patch` opens a release pull request; its merge publishes to npm in CI (`.github/workflows/build-publish.yml`) and the release GitHub App tags the bare version. A published version reaches boards only after the platform's rollout (Studio's dependency pin, the platform database's widget registration); IronFlock developers find those steps in the internal runbook `docs/INTERNAL-widget-platform.md` of the deployments repository.
 
 For local platform testing, run Studio's dev server with this repo checked out in `../ironflock-widgets/` next to `studio/`, and `npm run watch` here; Studio imports the built `dist/`, so a tile renders it only when its pinned version equals `package.json`'s.
 
