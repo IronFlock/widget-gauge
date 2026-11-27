@@ -48,7 +48,7 @@ and remaining work there when handing a task to another developer or agent.
 | `npm run types` | Regenerate `src/definition-schema.d.ts` from `src/definition-schema.json` (run after any schema edit) |
 | `just lint` | What the CI gate checks besides the build: regenerating the committed generated files changes nothing |
 | `just merge` / `just release-patch` | Pull requests into `main` from a feature branch with everything committed; the merge of a release pull request publishes to npm in CI (`build-publish.yml`), then the release GitHub App tags the bare version. Also `release-minor` / `release-major`. |
-| `npm run link` / `unlink` | Symlink the built package into `../RESWARM/frontend` for integration testing |
+| `npm run link` / `unlink` | Build and `npm link` into the studio checkout at `../../studio`, or put the published package back. Only studio's appliance build reads `node_modules`; its dev server already serves this checkout's `dist/`, so `npm run watch` is enough for dev. After `unlink`, run `bun install` in studio too |
 
 No test runner or linter is configured. Node `>=24.9.0`, npm `>=10.0.2`.
 
