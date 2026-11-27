@@ -78,6 +78,7 @@ Workflow: edit `definition-schema.json` -> `npm run types` -> import the regener
 **Build pipeline (`vite.config.ts`):**
 - Library build, ES format only, entry `src/widget-gauge.ts`
 - `echarts` is `external` (peerDependency) — consumers provide it
+- `lit` is `external` too: studio's import map provides one copy for all widgets. It stays in `dependencies`, because the package's types import it
 - `process.env.NODE_ENV` is forced to `'production'` so ECharts ships its optimized path
 - `tslib` aliased to `tslib/tslib.es6.js`
 - ECharts must be imported modularly (`echarts/core` + specific charts/renderers via `echarts.use(...)`) to keep the bundle small
